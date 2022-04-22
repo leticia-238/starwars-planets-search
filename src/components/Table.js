@@ -18,19 +18,20 @@ const tableTitles = [
 ];
 
 const Table = () => {
-  const { data } = useContext(StarWarsContext);
+  const { filteredPlanets } = useContext(StarWarsContext);
 
   return (
     <table>
       <thead>
         <tr>
-          {data.length > 0 && tableTitles.map((title, index) => (
+          {filteredPlanets.length > 0 && tableTitles.map((title, index) => (
             <th key={ index }>{title}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.length > 0 && data.map(({ name, rotation_period: rotationPeriod,
+        {filteredPlanets.length > 0
+        && filteredPlanets.map(({ name, rotation_period: rotationPeriod,
           orbital_period: orbitalPeriod, diameter, climate, gravity, terrain,
           surface_water: surfaceWater, population, films, created, edited, url,
         }, index) => (
