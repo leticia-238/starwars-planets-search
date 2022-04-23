@@ -52,8 +52,6 @@ const StarWarsProvider = ({ children }) => {
     });
   }, [data, filterByNumericValues]);
 
-  //= =================================================//
-
   const contextValue = {
     data,
     setPlanetsData,

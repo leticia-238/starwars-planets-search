@@ -5,7 +5,15 @@ const TableFilters = () => {
   const { filterByName: { name }, setPlanetName, filterByNumericValues,
     setNumericFilter } = useContext(StarWarsContext);
 
-  const [column, setColumn] = useState('population');
+  const [columns, setColumnFilter] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
+
+  const [column, setColumn] = useState(columns[0]);
   const [comparison, setComparison] = useState('maior que');
   const [value, setValue] = useState('0');
 
@@ -29,11 +37,11 @@ const TableFilters = () => {
           value={ column }
           onChange={ ({ target }) => { setColumn(target.value); } }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {
+            columns.map((columnName, index) => (
+              <option key={ index } value={ columnName }>{columnName}</option>
+            ))
+          }
         </select>
       </label>
       <label htmlFor="comparison-filter">
@@ -62,9 +70,11 @@ const TableFilters = () => {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ () => setNumericFilter(
-          [...filterByNumericValues, { column, comparison, value }],
-        ) }
+        onClick={ () => {
+          setNumericFilter([...filterByNumericValues, { column, comparison, value }]);
+          setColumnFilter(columns.filter((columnName) => columnName !== column));
+          setColumn(columns[1]);
+        } }
       >
         Filter
       </button>
