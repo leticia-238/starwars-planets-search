@@ -4,9 +4,56 @@ import StarWarsContext from './StarWarsContext';
 import fetchStarWarsPlanets from '../services/starWarsApi';
 
 const StarWarsProvider = ({ children }) => {
+  //= =================================================//
   const [data, setPlanetsData] = useState([]);
+
+  const fetchData = async () => {
+    const planetsData = await fetchStarWarsPlanets();
+    setPlanetsData(planetsData);
+  };
+
+  useEffect(() => { fetchData(); }, []);
+  //= =================================================//
+
   const [name, onChangeName] = useState('');
   const [filteredPlanets, setFilteredPlanets] = useState([]);
+
+  useEffect(() => {
+    if (name.trim().length > 0) {
+      setFilteredPlanets(data.filter((planet) => (planet.name.includes(name))));
+    } else {
+      setFilteredPlanets(data);
+    }
+  }, [data, name]);
+  //= =================================================//
+
+  const [filterByNumericValues, setNumericFilter] = useState({
+    column: '',
+    comparison: '',
+    value: '',
+  });
+
+  useEffect(() => {
+    const { column, comparison, value } = filterByNumericValues;
+    const filterBy = data.filter((planet) => {
+      const num = parseFloat(planet[column]);
+      const numValue = parseFloat(value);
+      switch (comparison) {
+      case 'maior que':
+        return num > numValue;
+      case 'menor que':
+        return num < numValue;
+      case 'igual a':
+        return num === numValue;
+      default:
+        return true;
+      }
+    });
+
+    setFilteredPlanets(filterBy);
+  }, [data, filterByNumericValues]);
+
+  //= =================================================//
 
   const contextValue = {
     data,
@@ -15,21 +62,9 @@ const StarWarsProvider = ({ children }) => {
     onChangeName,
     filteredPlanets,
     setFilteredPlanets,
+    filterByNumericValues,
+    setNumericFilter,
   };
-
-  const fetchData = async () => {
-    const planetsData = await fetchStarWarsPlanets();
-    setPlanetsData(planetsData);
-  };
-
-  useEffect(() => { fetchData(); }, []);
-  useEffect(() => {
-    if (name.trim().length > 0) {
-      setFilteredPlanets(data.filter((planet) => (planet.name.includes(name))));
-    } else {
-      setFilteredPlanets(data);
-    }
-  }, [data, name]);
 
   return (
     <StarWarsContext.Provider value={ contextValue }>
