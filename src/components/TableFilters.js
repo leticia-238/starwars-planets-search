@@ -3,15 +3,7 @@ import StarWarsContext from '../context/StarWarsContext';
 
 const TableFilters = () => {
   const { filterByName: { name }, setPlanetName, filterByNumericValues,
-    setNumericFilter } = useContext(StarWarsContext);
-
-  const [columns, setColumnFilter] = useState([
-    'population',
-    'orbital_period',
-    'diameter',
-    'rotation_period',
-    'surface_water',
-  ]);
+    setNumericFilter, columns, setColumnFilter } = useContext(StarWarsContext);
 
   const [column, setColumn] = useState(columns[0]);
   const [comparison, setComparison] = useState('maior que');
