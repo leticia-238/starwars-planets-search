@@ -27,9 +27,7 @@ const StarWarsProvider = ({ children }) => {
   }, [data, name]);
   //= =================================================//
 
-  const [filterByNumericValues, setNumericFilter] = useState([{
-    column: '', comparison: '', value: '',
-  }]);
+  const [filterByNumericValues, setNumericFilter] = useState([]);
 
   useEffect(() => {
     let filterResult = data;
