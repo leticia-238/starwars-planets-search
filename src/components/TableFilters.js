@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 const TableFilters = () => {
-  const { filterByName: { name }, onChangeName,
+  const { filterByName: { name }, setPlanetName, filterByNumericValues,
     setNumericFilter } = useContext(StarWarsContext);
 
   const [column, setColumn] = useState('population');
@@ -18,7 +18,7 @@ const TableFilters = () => {
           id="name-filter"
           data-testid="name-filter"
           value={ name }
-          onChange={ ({ target }) => { onChangeName(target.value); } }
+          onChange={ ({ target }) => { setPlanetName(target.value); } }
         />
       </label>
       <label htmlFor="column-filter">
@@ -62,7 +62,9 @@ const TableFilters = () => {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ () => setNumericFilter({ column, comparison, value }) }
+        onClick={ () => setNumericFilter(
+          [...filterByNumericValues, { column, comparison, value }],
+        ) }
       >
         Filter
       </button>

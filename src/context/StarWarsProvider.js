@@ -15,7 +15,7 @@ const StarWarsProvider = ({ children }) => {
   useEffect(() => { fetchData(); }, []);
   //= =================================================//
 
-  const [name, onChangeName] = useState('');
+  const [name, setPlanetName] = useState('');
   const [filteredPlanets, setFilteredPlanets] = useState([]);
 
   useEffect(() => {
@@ -27,30 +27,31 @@ const StarWarsProvider = ({ children }) => {
   }, [data, name]);
   //= =================================================//
 
-  const [filterByNumericValues, setNumericFilter] = useState({
-    column: '',
-    comparison: '',
-    value: '',
-  });
+  const [filterByNumericValues, setNumericFilter] = useState([{
+    column: '', comparison: '', value: '',
+  }]);
 
   useEffect(() => {
-    const { column, comparison, value } = filterByNumericValues;
-    const filterBy = data.filter((planet) => {
-      const num = parseFloat(planet[column]);
-      const numValue = parseFloat(value);
-      switch (comparison) {
-      case 'maior que':
-        return num > numValue;
-      case 'menor que':
-        return num < numValue;
-      case 'igual a':
-        return num === numValue;
-      default:
-        return true;
-      }
-    });
+    let filterResult = data;
+    filterByNumericValues.forEach((filter) => {
+      const { column, comparison, value } = filter;
 
-    setFilteredPlanets(filterBy);
+      filterResult = filterResult.filter((planet) => {
+        const num = parseFloat(planet[column]);
+        const numValue = parseFloat(value);
+        switch (comparison) {
+        case 'maior que':
+          return num > numValue;
+        case 'menor que':
+          return num < numValue;
+        case 'igual a':
+          return num === numValue;
+        default:
+          return true;
+        }
+      });
+      setFilteredPlanets(filterResult);
+    });
   }, [data, filterByNumericValues]);
 
   //= =================================================//
@@ -59,7 +60,7 @@ const StarWarsProvider = ({ children }) => {
     data,
     setPlanetsData,
     filterByName: { name },
-    onChangeName,
+    setPlanetName,
     filteredPlanets,
     setFilteredPlanets,
     filterByNumericValues,
