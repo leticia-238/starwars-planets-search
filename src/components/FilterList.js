@@ -1,16 +1,8 @@
 import React, { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
-const defaultColumns = [
-  'population',
-  'orbital_period',
-  'diameter',
-  'rotation_period',
-  'surface_water',
-];
-
 const FilterList = () => {
-  const { filterByNumericValues, setNumericFilter, columns,
+  const { filterByNumericValues, setNumericFilter, defaultColumns, columns,
     setColumnFilter } = useContext(StarWarsContext);
   return (
     <div>

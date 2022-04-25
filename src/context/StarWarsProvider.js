@@ -17,6 +17,9 @@ const StarWarsProvider = ({ children }) => {
 
   const fetchData = async () => {
     const planetsData = await fetchStarWarsPlanets();
+    planetsData.sort((previousPlanet, nextPlanet) => (
+      previousPlanet.name.localeCompare(nextPlanet.name)
+    ));
     setPlanetsData(planetsData);
   };
 
@@ -63,19 +66,43 @@ const StarWarsProvider = ({ children }) => {
     }
   }, [data, filterByNumericValues]);
 
+  //= =================================================//
   const [columns, setColumnFilter] = useState(defaultColumns);
+
+  //= =================================================//
+  const [order, setOrder] = useState({});
+
+  useEffect(() => {
+    if (Object.keys(order).length > 0) {
+      const { orderColumn, orderSort } = order;
+      const sortResult = [...data].sort((previousPlanet, nextPlanet) => {
+        const previousValue = parseFloat(previousPlanet[orderColumn]);
+        const nextValue = parseFloat(nextPlanet[orderColumn]);
+        if (nextPlanet[orderColumn] === 'unknown') {
+          const returnValue = -1;
+          return returnValue;
+        }
+        return orderSort === 'ASC'
+          ? previousValue - nextValue
+          : nextValue - previousValue;
+      });
+      setFilteredPlanets(sortResult);
+    }
+  }, [data, order]);
 
   const contextValue = {
     data,
-    setPlanetsData,
     filterByName: { name },
     setPlanetName,
     filteredPlanets,
     setFilteredPlanets,
     filterByNumericValues,
     setNumericFilter,
+    defaultColumns,
     columns,
     setColumnFilter,
+    order,
+    setOrder,
   };
 
   return (

@@ -3,11 +3,14 @@ import StarWarsContext from '../context/StarWarsContext';
 
 const TableFilters = () => {
   const { filterByName: { name }, setPlanetName, filterByNumericValues,
-    setNumericFilter, columns, setColumnFilter } = useContext(StarWarsContext);
+    setNumericFilter, defaultColumns, columns,
+    setColumnFilter, setOrder } = useContext(StarWarsContext);
 
   const [column, setColumn] = useState(columns[0]);
   const [comparison, setComparison] = useState('maior que');
   const [value, setValue] = useState('0');
+  const [orderColumn, setOrderColumn] = useState('population');
+  const [orderSort, setOrderSort] = useState('ASC');
 
   return (
     <div>
@@ -69,6 +72,50 @@ const TableFilters = () => {
         } }
       >
         Filter
+      </button>
+      <label htmlFor="column-sort">
+        Column Sort
+        <select
+          id="column-sort"
+          data-testid="column-sort"
+          value={ orderColumn }
+          onChange={ ({ target }) => setOrderColumn(target.value) }
+        >
+          {defaultColumns.map((columnName, index) => (
+            <option key={ index } value={ columnName }>{columnName}</option>
+          ))}
+        </select>
+      </label>
+      <label htmlFor="column-sort-input-asc">
+        <input
+          type="radio"
+          name="sort"
+          id="column-sort-input-asc"
+          data-testid="column-sort-input-asc"
+          value="ASC"
+          checked={ orderSort === 'ASC' }
+          onChange={ ({ target }) => { setOrderSort(target.value); } }
+        />
+        ASC
+      </label>
+      <label htmlFor="column-sort-input-desc">
+        <input
+          type="radio"
+          name="sort"
+          id="column-sort-input-desc"
+          data-testid="column-sort-input-desc"
+          value="DESC"
+          checked={ orderSort === 'DESC' }
+          onChange={ ({ target }) => { setOrderSort(target.value); } }
+        />
+        DESC
+      </label>
+      <button
+        type="button"
+        data-testid="column-sort-button"
+        onClick={ () => { setOrder({ orderColumn, orderSort }); } }
+      >
+        Sort Column
       </button>
     </div>
   );

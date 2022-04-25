@@ -36,7 +36,7 @@ const Table = () => {
           surface_water: surfaceWater, population, films, created, edited, url,
         }, index) => (
           <tr key={ index }>
-            <td>{name}</td>
+            <td data-testid="planet-name">{name}</td>
             <td>{rotationPeriod}</td>
             <td>{orbitalPeriod}</td>
             <td>{diameter}</td>
